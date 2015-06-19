@@ -1,0 +1,230 @@
+<?xml version='1.0' standalone='yes'?>
+<Configuration>
+  <gui>
+    <appearance>
+      <color>
+        <blue>11993</blue>
+        <green>52632</green>
+        <red>33334</red>
+      </color>
+      <compact>1</compact>
+      <iconsPath>/usr/share/symphaty/pixmaps</iconsPath>
+      <stockIcons>
+        <gtk-dialog-error>error.png</gtk-dialog-error>
+        <gtk-dialog-info>about.png</gtk-dialog-info>
+        <gtk-dialog-warning>warning.png</gtk-dialog-warning>
+      </stockIcons>
+    </appearance>
+    <labels>
+      <eng>
+        <addtense>
+          <add>Add</add>
+          <cancel>Cancel</cancel>
+          <emptyInfinitive>You have empty infinitive field!</emptyInfinitive>
+          <emptyParticiple>You have empty participle field!</emptyParticiple>
+          <emptyPast>You have empty past field!</emptyPast>
+          <firstAddInEng>Word ###word### weren't found in word database, add first in word database then in tense database.</firstAddInEng>
+          <header>Add tense</header>
+          <infinitive>infinitive</infinitive>
+          <participle>participle</participle>
+          <past>past</past>
+          <tooltip>Add tense</tooltip>
+          <updated>Word ###word### and his tenses updated.</updated>
+        </addtense>
+        <addtenseUpdate>
+          <cancel>Cancel</cancel>
+          <header>Update</header>
+          <question>Would you like to update tense of word ###word###?</question>
+          <update>Update</update>
+        </addtenseUpdate>
+        <addword>
+          <add>Add</add>
+          <already>Word ###word### and it's meaning ###meaning### are already in database</already>
+          <alreadyEng>English word ###word### is already in database, new slovak meaning ###meaning### added</alreadyEng>
+          <alreadySk>Slovak word ###meaning### is already in database, new english meaning added ###word###</alreadySk>
+          <cancel>Cancel</cancel>
+          <empty>Both fields english and slovak are empty!</empty>
+          <emptyEng>English input is empty!</emptyEng>
+          <emptySk>Slovak input is empty!</emptySk>
+          <englishword>english</englishword>
+          <header>Add word</header>
+          <new>New word ###word### was added.</new>
+          <slovakword>slovak</slovakword>
+          <tooltip>Add one word</tooltip>
+        </addword>
+        <addwords>
+          <badFormatFile>File has bad format, should be like this english:slovak1:slovak2, on line:</badFormatFile>
+          <cancel>Cancel</cancel>
+          <emptyFile>File is empty!</emptyFile>
+          <header>Add words from file</header>
+          <nonTextFile>File is not text file!</nonTextFile>
+          <open>Open</open>
+          <tooltip>Add words from file</tooltip>
+        </addwords>
+        <addwordsProgress>
+          <cancel>Cancel</cancel>
+          <cancelationMessage>Adding of words canceled</cancelationMessage>
+          <header>Progress of adding</header>
+          <ok>Ok</ok>
+        </addwordsProgress>
+        <clipboardsearch>
+          <tooltip>Translate word in clipboard</tooltip>
+        </clipboardsearch>
+        <collapse>
+          <tooltip>Collapse all words</tooltip>
+        </collapse>
+        <help>
+          <tooltip>Help</tooltip>
+        </help>
+        <info>
+          <author>author</author>
+          <header>Info</header>
+          <license>licence</license>
+          <tooltip>Informations about Symphaty</tooltip>
+          <version>version</version>
+          <year>year</year>
+        </info>
+        <inputentry>
+          <tooltip>Type word to translate and press Enter</tooltip>
+        </inputentry>
+        <output>
+          <header>Search result</header>
+          <messages>
+            <notFoundEng>English word ###word### was not found in database.</notFoundEng>
+            <notFoundSvk>Slovak word ###word### was not found in database.</notFoundSvk>
+            <shortCutDisplay>First 5 meanings of word</shortCutDisplay>
+          </messages>
+          <resultitems>
+            <phrase>phrase</phrase>
+            <tense>tense</tense>
+            <word>meaning</word>
+          </resultitems>
+        </output>
+        <recyclebin>
+          <tooltip>Clear all words</tooltip>
+        </recyclebin>
+        <settings>
+          <cancel>cancel</cancel>
+          <colorchooser>choose color</colorchooser>
+          <englishlabels>english</englishlabels>
+          <header>Settings</header>
+          <ok>submit</ok>
+          <slovaklabels>slovak</slovaklabels>
+          <tooltip>Settings of Symphaty</tooltip>
+        </settings>
+        <shrink>
+          <tooltip>Transform to compact style</tooltip>
+        </shrink>
+        <switchlang>
+          <tooltip>Switch translation direction</tooltip>
+        </switchlang>
+      </eng>
+      <svk>
+        <addtense>
+          <add>Pridaj</add>
+          <cancel>Zrušiť</cancel>
+          <emptyInfinitive>Nemáte vyplnený infinitív!</emptyInfinitive>
+          <emptyParticiple>Nemáte vyplnené trpné príčastie!</emptyParticiple>
+          <emptyPast>Nemáte vyplený minulý čas!</emptyPast>
+          <firstAddInEng>Uvedené slovo ###word### sa nenachádza v databáze slov, musíte ho prídať najprv do databázy slov a potom do databázy časov!</firstAddInEng>
+          <header>Pridaj čas</header>
+          <infinitive>infinitív</infinitive>
+          <participle>trpný</participle>
+          <past>minulý</past>
+          <tooltip>Pridať čas</tooltip>
+          <updated>Slovo ###word### a jeho časy boli aktualizované.</updated>
+        </addtense>
+        <addtenseUpdate>
+          <cancel>Neaktualizuj</cancel>
+          <header>Aktualizuj</header>
+          <question>Chcete aktualizovať čas slova ###word###?</question>
+          <update>Aktualizuj</update>
+        </addtenseUpdate>
+        <addword>
+          <add>Pridaj</add>
+          <already>Slovo ###word### aj jeho význam ###meaning### sú už v databáze.</already>
+          <alreadyEng>Anglické slovo ###word### je už v databáze, pridaný slovenský význam ###meaning###</alreadyEng>
+          <alreadySk>Slovenské slovo ###meaning### je už v databáze, pridaný anglický význam ###word###</alreadySk>
+          <cancel>Zrušiť</cancel>
+          <empty>Slovenské aj anglické pole prázdne!</empty>
+          <emptyEng>Nezadali ste anglické slovo!</emptyEng>
+          <emptySk>Nezadali ste slovenské slovo!</emptySk>
+          <englishword>anglicky</englishword>
+          <header>Pridaj slovo</header>
+          <new>Nové slovo ###word### bolo pridané.</new>
+          <slovakword>slovensky</slovakword>
+          <tooltip>Pridať jedno slovo</tooltip>
+        </addword>
+        <addwords>
+          <badFormatFile>Súbor má zlý formát, mal by byť takýto anglické:slovenské1:slovenské2, na riadku:</badFormatFile>
+          <cancel>Zrušiť</cancel>
+          <emptyFile>Súbor je prázdny!</emptyFile>
+          <header>Pridaj slová zo súboru</header>
+          <nonTextFile>Vybraný súbor nie je textový súbor!</nonTextFile>
+          <open>Otvoriť</open>
+          <tooltip>Pridať viacej slov zo súboru</tooltip>
+        </addwords>
+        <addwordsProgress>
+          <cancel>Zrušiť</cancel>
+          <cancelationMessage>Pridávanie slov zrušené</cancelationMessage>
+          <header>Priebeh pridávania</header>
+          <ok>Ok</ok>
+        </addwordsProgress>
+        <clipboard></clipboard>
+        <clipboardsearch>
+          <tooltip>Preložte slovo v kopírovacej schánke</tooltip>
+        </clipboardsearch>
+        <collapse>
+          <tooltip>Zroluj všetky slová</tooltip>
+        </collapse>
+        <help>
+          <tooltip>Pomoc</tooltip>
+        </help>
+        <info>
+          <author>autor</author>
+          <header>Info</header>
+          <license>licencia</license>
+          <tooltip>Informácie o Symphaty</tooltip>
+          <version>verzia</version>
+          <year>rok</year>
+        </info>
+        <inputentry>
+          <tooltip>Zadajte slovo a stlačte Enter</tooltip>
+        </inputentry>
+        <output>
+          <header>Výsledok hľadania</header>
+          <messages>
+            <notFoundEng>Anglické slovo ###word### nebolo nájdené v databáze.</notFoundEng>
+            <notFoundSvk>Slovenské slovo ###word### nebolo nájdené v databáze.</notFoundSvk>
+            <shortCutDisplay>Prvých 5 významov slova</shortCutDisplay>
+          </messages>
+          <resultitems>
+            <phrase>fráza</phrase>
+            <tense>čas</tense>
+            <word>význam</word>
+          </resultitems>
+        </output>
+        <recyclebin>
+          <tooltip>Vymaž všetky slová</tooltip>
+        </recyclebin>
+        <settings>
+          <cancel>zrušiť</cancel>
+          <colorchooser>vyber farbu</colorchooser>
+          <englishlabels>anglicky</englishlabels>
+          <header>Nastavenia</header>
+          <ok>potvrdiť</ok>
+          <slovaklabels>slovensky</slovaklabels>
+          <tooltip>Nastavenia</tooltip>
+        </settings>
+        <shrink>
+          <tooltip>Transformuj na kompaktný štýl</tooltip>
+        </shrink>
+        <switchlang>
+          <tooltip>Zmeň smer prekladu</tooltip>
+        </switchlang>
+      </svk>
+    </labels>
+  </gui>
+  <langDirection>eng</langDirection>
+  <langLabels>svk</langLabels>
+</Configuration>
