@@ -18,3 +18,9 @@ nytprof.out
 *.o
 *.bs
 /_eumm/
+doc/
+menu/
+pixmaps/
+logo/
+applications/
+.project
