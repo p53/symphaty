@@ -3,12 +3,10 @@
   <gui>
     <appearance>
       <color>
-        <blue>11993</blue>
-        <green>52632</green>
-        <red>33334</red>
+        <rgba>rgb(211,215,207)</rgba>
       </color>
-      <compact>1</compact>
-      <iconsPath>/usr/share/symphaty/pixmaps</iconsPath>
+      <compact>0</compact>
+      <iconsPath>pixmaps</iconsPath>
       <stockIcons>
         <gtk-dialog-error>error.png</gtk-dialog-error>
         <gtk-dialog-info>about.png</gtk-dialog-info>

@@ -44,7 +44,7 @@ sub new {
 
 =head2 displayResult
 	
-	This method displays result from retrieved from database to tree view gtk2 widget
+	This method displays result from retrieved from database to tree view Gtk3 widget
 =cut
 
 sub displayResult {

@@ -50,7 +50,7 @@ sub new {
 sub _init {
 	my $self = shift;
 	my $xmlObject = XML::Simple->new(NoAttr=>1,RootName=>'Configuration',ForceArray=>1);
-	my $xmlData = $xmlObject->XMLin('/usr/share/symphaty/config.xml');
+	my $xmlData = $xmlObject->XMLin($self->{'path'});
 	$self->{xml} = $xmlObject;
 	$self->{xmlData} = $xmlData;
 } # end sub _init
@@ -113,12 +113,10 @@ sub getLangLabels {
 sub setColor {
 
 	my $self = shift;
-	my $red = shift;
-	my $green = shift;
-	my $blue = shift;
-	$self->{xmlData}->{gui}->[0]->{appearance}->[0]->{color}->[0]->{red}->[0] = $red;
-	$self->{xmlData}->{gui}->[0]->{appearance}->[0]->{color}->[0]->{green}->[0] = $green;
-	$self->{xmlData}->{gui}->[0]->{appearance}->[0]->{color}->[0]->{blue}->[0] = $blue;
+	my $rgba = shift;
+
+	$self->{xmlData}->{gui}->[0]->{appearance}->[0]->{color}->[0]->{rgba}->[0] = $rgba;
+
 	return $self;
 	
 } # end sub setColor
@@ -130,18 +128,9 @@ sub setColor {
 =cut
 
 sub getColor {
-
 	my $self = shift;	
-	$red = $self->{xmlData}->{gui}->[0]->{appearance}->[0]->{color}->[0]->{red}->[0];
-	$green = $self->{xmlData}->{gui}->[0]->{appearance}->[0]->{color}->[0]->{green}->[0];
-	$blue = $self->{xmlData}->{gui}->[0]->{appearance}->[0]->{color}->[0]->{blue}->[0];
-	my %color = (
-					'red' => $red,
-					'green' => $green,
-					'blue' => $blue
-				);
-	return \%color;
-	
+	$rgba = $self->{xmlData}->{gui}->[0]->{appearance}->[0]->{color}->[0]->{rgba}->[0];
+	return $rgba;
 } # end sub getColor
 
 =head2 getStockIcons
@@ -213,7 +202,7 @@ sub getIconsPath {
 
 sub save {
 	my $self = shift;
-	open my $filehandler,">:utf8",'/usr/share/symphaty/config.xml' or die $!;
+	open my $filehandler,">:utf8",$self->{'path'} or die $!;
 	my $success = $self->{xml}->XMLout($self->{xmlData},'OutputFile' => $filehandler,XMLDecl => 1);
 	return $success;
 } # end sub save

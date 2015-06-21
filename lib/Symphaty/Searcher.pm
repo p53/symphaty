@@ -38,6 +38,8 @@ use Symphaty::MyDictionary::Schema::En_Phrase;
 
 my $schema;
 
+my $dbPath;
+
 sub new {
 	my $class = shift;
 	my $self = {@_};
@@ -48,8 +50,20 @@ sub new {
 
 sub _init {
 	my $self = shift;
-	$schema = Symphaty::MyDictionary::Schema->connection('dbi:SQLite:/usr/share/symphaty/Dictionary.db','', '',{ sqlite_unicode => 1} );
+	$schema = Symphaty::MyDictionary::Schema->connection('dbi:SQLite:' . $dbPath,'', '',{ sqlite_unicode => 1} );
 } # method _init 
+
+sub setDbPath {
+    
+    my %params = @_;
+    
+    if( ! exists($params{'path'}) ) {
+        die "Db path must be set!";    
+    } # if
+    
+    $dbPath = $params{'path'};
+    
+} # setDbPath
 
 =head2 getTranslationDirection
 

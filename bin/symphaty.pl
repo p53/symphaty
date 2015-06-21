@@ -1,5 +1,13 @@
 #!/usr/bin/perl -w
 
+BEGIN {
+        use Cwd 'abs_path';
+        # getting absolute path to this script and get current folder and library path
+        our $scriptPath = abs_path($0);
+        $scriptPath =~ s/^(.*)(\/|\\).*$/$1/;
+        our $classesPath = $scriptPath . '/../lib';
+} # BEGIN
+
 =encoding utf8
 
 
@@ -17,9 +25,8 @@
 
 	strict
 	warnings
-	Gtk2
+	Gtk3
 	Glib
-	Gtk2::Gdk::Keysyms
 	DictionaryDialog
 	DictionaryPopUp
 	LangOperations
@@ -31,17 +38,18 @@
 
 =cut
 
+use lib $main::classesPath;
 use strict;
 use warnings;
-use Gtk2 -init;
+use Gtk3 -init;
 use Glib qw(TRUE FALSE); 
-use Gtk2::Gdk::Keysyms;
 use Symphaty::DictionaryDialog;
 use Symphaty::DictionaryPopUp;
 use Symphaty::LangOperations;
 use Symphaty::DbGuiCommunicator;
 use Symphaty::SymphatyConfig;
 use Symphaty::File;
+use Symphaty::Searcher;
 use Clipboard;
 use Symphaty::Browser;
 
@@ -50,43 +58,44 @@ use Symphaty::Browser;
 #-------------------------------------------------------------------------------
 # creating class for retrieving settings from xml file and retrieving settings
 #-------------------------------------------------------------------------------
-my $configuration = SymphatyConfig->new();
+my $configuration = SymphatyConfig->new('path' => $main::scriptPath . '/../etc/config.xml');
 my $lang = $configuration->getLang();
 my $langForLabels = $configuration->getLangLabels();
 my $langLabels = $configuration->getAllGuiLabels($langForLabels);
 my $colorRGB = $configuration->getColor();
 my $compact = $configuration->getCompact();
-my $iconPath = $configuration->getIconsPath();
+my $iconPath = $main::scriptPath . '/../pixmaps';
+Searcher::setDbPath('path' => $main::scriptPath . '/../data/Dictionary.db');
 ###################################GUI##########################################
 
 #------------- Images ----------------------------------------------------------
 
 	#------------- Top Menu Box Images ---------------------------------------------
-	my $addWordImage = Gtk2::Image->new_from_file($iconPath . '/word.png');
-	my $addWordsImage = Gtk2::Image->new_from_file($iconPath . '/words.png');
-	my $addTenseImage = Gtk2::Image->new_from_file($iconPath . '/tense.png');
-	my $switchLangEnImage = Gtk2::Image->new_from_file($iconPath . '/eng_to_svk.png');
-	my $switchLangSkImage = Gtk2::Image->new_from_file($iconPath . '/svk_to_eng.png');
-	my $settingsImage = Gtk2::Image->new_from_file($iconPath . '/settings.png');
-	my $helpImage = Gtk2::Image->new_from_file($iconPath . '/help.png');
-	my $infoImage = Gtk2::Image->new_from_file($iconPath . '/info.png');
-	my $aboutImage = Gtk2::Image->new_from_file($iconPath . '/about.png');
+	my $addWordImage = Gtk3::Image->new_from_file($iconPath . '/word.png');
+	my $addWordsImage = Gtk3::Image->new_from_file($iconPath . '/words.png');
+	my $addTenseImage = Gtk3::Image->new_from_file($iconPath . '/tense.png');
+	my $switchLangEnImage = Gtk3::Image->new_from_file($iconPath . '/eng_to_svk.png');
+	my $switchLangSkImage = Gtk3::Image->new_from_file($iconPath . '/svk_to_eng.png');
+	my $settingsImage = Gtk3::Image->new_from_file($iconPath . '/settings.png');
+	my $helpImage = Gtk3::Image->new_from_file($iconPath . '/help.png');
+	my $infoImage = Gtk3::Image->new_from_file($iconPath . '/info.png');
+	my $aboutImage = Gtk3::Image->new_from_file($iconPath . '/about.png');
 	#-------------------------------------------------------------------------------
 	
 	#------------- Input Box Images ------------------------------------------------
-	my $shrinkImage = Gtk2::Image->new_from_file($iconPath . '/max.png');
-	my $maxImage = Gtk2::Image->new_from_file($iconPath . '/shrink.png');
-	my $clipboardSearchImage = Gtk2::Image->new_from_file($iconPath . '/clipboardsearch.png');
-	my $collapseImage = Gtk2::Image->new_from_file($iconPath . '/collapse.png');
-	my $recyclebinImage = Gtk2::Image->new_from_file($iconPath . '/recyclebin.png');
+	my $shrinkImage = Gtk3::Image->new_from_file($iconPath . '/max.png');
+	my $maxImage = Gtk3::Image->new_from_file($iconPath . '/shrink.png');
+	my $clipboardSearchImage = Gtk3::Image->new_from_file($iconPath . '/clipboardsearch.png');
+	my $collapseImage = Gtk3::Image->new_from_file($iconPath . '/collapse.png');
+	my $recyclebinImage = Gtk3::Image->new_from_file($iconPath . '/recyclebin.png');
 	#-------------------------------------------------------------------------------
 	
 #-------------------------------------------------------------------------------
-
+                                               
 ################################################################################
 
 #------------- Colors ----------------------------------------------------------
-my $color = Gtk2::Gdk::Color->new($$colorRGB{red}, $$colorRGB{green}, $$colorRGB{blue});
+my $color = '';
 #-------------------------------------------------------------------------------
 
 ################################################################################
@@ -94,16 +103,26 @@ my $color = Gtk2::Gdk::Color->new($$colorRGB{red}, $$colorRGB{green}, $$colorRGB
 #------------- Windows ---------------------------------------------------------
 
 	#------------- Main Window -----------------------------------------------------
-	my $mainWindow = Gtk2::Window->new('toplevel');
+	my $mainWindow = Gtk3::Window->new('toplevel');
 	$mainWindow->set_position('mouse');
 	$mainWindow->set_icon_from_file ($iconPath . '/symphaty.png'); 
 	$mainWindow->set_title('Symphaty');
-	$mainWindow->modify_bg ('normal', $color);
 	$mainWindow->set_resizable(FALSE);
+	
+    my $display = Gtk3::Gdk::Display::get_default();
+    my $screen = Gtk3::Gdk::Display::get_default_screen($display);
+  
+    my $provider = Gtk3::CssProvider->new();
+    Gtk3::StyleContext::add_provider_for_screen($screen, $provider, 800);
+    $provider->load_from_data(
+                                   "GtkWindow {\n"   .                      
+                                   "   background-color: " . $colorRGB. ";\n" .
+                                   "}\n", -1, undef
+                              );
 	#-------------------------------------------------------------------------------
 	
 	#------------- Output Box Scrolled Window --------------------------------------
-	my $outputScrolledWindow = Gtk2::ScrolledWindow->new(undef,undef);
+	my $outputScrolledWindow = Gtk3::ScrolledWindow->new(undef,undef);
 	$outputScrolledWindow->set_shadow_type('etched-out');
 	$outputScrolledWindow->set_size_request(500,300);
 	#-------------------------------------------------------------------------------
@@ -115,19 +134,19 @@ my $color = Gtk2::Gdk::Color->new($$colorRGB{red}, $$colorRGB{green}, $$colorRGB
 #------------- Boxes -----------------------------------------------------------
 	
 	#------------- Main Window Sectioner Box ---------------------------------------
-	my $mainWindowSectionerVBox = Gtk2::VBox->new(FALSE, 0);
+	my $mainWindowSectionerVBox = Gtk3::VBox->new(FALSE, 0);
 	#-------------------------------------------------------------------------------
 	
 	#------------- Top Menu Box (parent Main Window Sectioner) ---------------------
-	my $topMenuHBox = Gtk2::HBox->new(FALSE, 0);
+	my $topMenuHBox = Gtk3::HBox->new(FALSE, 0);
 	#-------------------------------------------------------------------------------
 	
 	#------------- Input Box (parent Main Window Sectioner) ------------------------
-	my $inputHBox = Gtk2::HBox->new(FALSE, 0);
+	my $inputHBox = Gtk3::HBox->new(FALSE, 0);
 	#-------------------------------------------------------------------------------
 	
 	#------------- Output Box (parent Main Window Sectioner) -----------------------
-	my $outputHBox = Gtk2::HBox->new(FALSE, 0);
+	my $outputHBox = Gtk3::HBox->new(FALSE, 0);
 	#-------------------------------------------------------------------------------
 	
 #-------------------------------------------------------------------------------
@@ -137,34 +156,34 @@ my $color = Gtk2::Gdk::Color->new($$colorRGB{red}, $$colorRGB{green}, $$colorRGB
 #------------- Buttons ---------------------------------------------------------
 
 	#------------- Top Menu Box Buttons --------------------------------------------
-	my $addWordButton = Gtk2::Button->new();
+	my $addWordButton = Gtk3::Button->new();
 	$addWordButton->set_property('image' => $addWordImage);
-	my $addWordsButton = Gtk2::Button->new();
+	my $addWordsButton = Gtk3::Button->new();
 	$addWordsButton->set_property('image' => $addWordsImage);
-	my $addTenseButton = Gtk2::Button->new();
+	my $addTenseButton = Gtk3::Button->new();
 	$addTenseButton->set_property('image' => $addTenseImage);
-	my $switchLangButton = Gtk2::Button->new();
+	my $switchLangButton = Gtk3::Button->new();
 	if($lang eq 'eng') {
 		$switchLangButton->set_property('image' => $switchLangEnImage);
 	} else {
 		$switchLangButton->set_property('image' => $switchLangSkImage);
 	} # if
-	my $settingsButton = Gtk2::Button->new();
+	my $settingsButton = Gtk3::Button->new();
 	$settingsButton->set_property('image' => $settingsImage);
-	my $helpButton = Gtk2::Button->new();
+	my $helpButton = Gtk3::Button->new();
 	$helpButton->set_property('image' => $helpImage);
-	my $infoButton = Gtk2::Button->new();
+	my $infoButton = Gtk3::Button->new();
 	$infoButton->set_property('image' => $infoImage);
 	#-------------------------------------------------------------------------------
 
 	#------------- Input Box Buttons -----------------------------------------------
-	my $shrinkButton = Gtk2::Button->new();
+	my $shrinkButton = Gtk3::Button->new();
 	$shrinkButton->set_property('image' => $shrinkImage);
-	my $clipboardSearchButton = Gtk2::Button->new();
+	my $clipboardSearchButton = Gtk3::Button->new();
 	$clipboardSearchButton->set_property('image' => $clipboardSearchImage);
-	my $collapseButton = Gtk2::Button->new();
+	my $collapseButton = Gtk3::Button->new();
 	$collapseButton->set_property('image' => $collapseImage);
-	my $recyclebinButton = Gtk2::Button->new();
+	my $recyclebinButton = Gtk3::Button->new();
 	$recyclebinButton->set_property('image' => $recyclebinImage);
 	#-------------------------------------------------------------------------------
 
@@ -175,7 +194,7 @@ my $color = Gtk2::Gdk::Color->new($$colorRGB{red}, $$colorRGB{green}, $$colorRGB
 #------------- Entries ---------------------------------------------------------
 
 	#------------- Input Box Entry -------------------------------------------------
-	my $inputEntry = Gtk2::Entry->new();
+	my $inputEntry = Gtk3::Entry->new();
 	#-------------------------------------------------------------------------------
 	
 #-------------------------------------------------------------------------------
@@ -185,11 +204,11 @@ my $color = Gtk2::Gdk::Color->new($$colorRGB{red}, $$colorRGB{green}, $$colorRGB
 #------------- TreeViews -------------------------------------------------------
 
 	#------------- Output Box TreeView ---------------------------------------------
-	my $outputTreeStore = Gtk2::TreeStore->new(qw/Glib::String/);
-	my $outputTreeView = Gtk2::TreeView->new($outputTreeStore);
-	my $resultsTreeColumn = Gtk2::TreeViewColumn->new();
+	my $outputTreeStore = Gtk3::TreeStore->new(qw/Glib::String/);
+	my $outputTreeView = Gtk3::TreeView->new($outputTreeStore);
+	my $resultsTreeColumn = Gtk3::TreeViewColumn->new();
 	$resultsTreeColumn->set_title($langLabels->{output}->[0]->{header}->[0]);
-	my $cell = Gtk2::CellRendererText->new();
+	my $cell = Gtk3::CellRendererText->new();
 	$resultsTreeColumn->pack_start ($cell, FALSE);
 	$resultsTreeColumn->add_attribute($cell, text => 0);
 	$cell->set_property('text', TRUE);
@@ -207,8 +226,8 @@ my $color = Gtk2::Gdk::Color->new($$colorRGB{red}, $$colorRGB{green}, $$colorRGB
 #------------- Separators ------------------------------------------------------
 
 	#------------- Top Menu Box Separators -----------------------------------------
-	my $afterAddSeparator = Gtk2::VSeparator->new();
-	my $afterSwitchLangSeparator = Gtk2::VSeparator->new();
+	my $afterAddSeparator = Gtk3::VSeparator->new();
+	my $afterSwitchLangSeparator = Gtk3::VSeparator->new();
 	#-------------------------------------------------------------------------------
 	
 #-------------------------------------------------------------------------------
@@ -218,19 +237,18 @@ my $color = Gtk2::Gdk::Color->new($$colorRGB{red}, $$colorRGB{green}, $$colorRGB
 #------------- Tooltips --------------------------------------------------------
 
 	#-------------------------------------------------------------------------------
-	my $toolTips = Gtk2::Tooltips->new();
-	$toolTips->set_tip($addWordButton, $langLabels->{addword}->[0]->{tooltip}->[0]);
-	$toolTips->set_tip($addWordsButton, $langLabels->{addwords}->[0]->{tooltip}->[0]);
-	$toolTips->set_tip($addTenseButton, $langLabels->{addtense}->[0]->{tooltip}->[0]);
-	$toolTips->set_tip($switchLangButton, $langLabels->{switchlang}->[0]->{tooltip}->[0]);
-	$toolTips->set_tip($settingsButton, $langLabels->{settings}->[0]->{tooltip}->[0]);
-	$toolTips->set_tip($helpButton, $langLabels->{help}->[0]->{tooltip}->[0]);
-	$toolTips->set_tip($infoButton, $langLabels->{info}->[0]->{tooltip}->[0]);
-	$toolTips->set_tip($inputEntry, $langLabels->{inputentry}->[0]->{tooltip}->[0]);
-	$toolTips->set_tip($clipboardSearchButton, $langLabels->{clipboardsearch}->[0]->{tooltip}->[0]);
-	$toolTips->set_tip($shrinkButton, $langLabels->{shrink}->[0]->{tooltip}->[0]);
-	$toolTips->set_tip($collapseButton, $langLabels->{collapse}->[0]->{tooltip}->[0]);
-	$toolTips->set_tip($recyclebinButton, $langLabels->{recyclebin}->[0]->{tooltip}->[0]);
+	$addWordButton->set_tooltip_text($langLabels->{addword}->[0]->{tooltip}->[0]);
+	$addWordsButton->set_tooltip_text($langLabels->{addwords}->[0]->{tooltip}->[0]);
+	$addTenseButton->set_tooltip_text($langLabels->{addtense}->[0]->{tooltip}->[0]);
+	$switchLangButton->set_tooltip_text($langLabels->{switchlang}->[0]->{tooltip}->[0]);
+	$settingsButton->set_tooltip_text($langLabels->{settings}->[0]->{tooltip}->[0]);
+	$helpButton->set_tooltip_text($langLabels->{help}->[0]->{tooltip}->[0]);
+	$infoButton->set_tooltip_text($langLabels->{info}->[0]->{tooltip}->[0]);
+	$inputEntry->set_tooltip_text($langLabels->{inputentry}->[0]->{tooltip}->[0]);
+	$clipboardSearchButton->set_tooltip_text($langLabels->{clipboardsearch}->[0]->{tooltip}->[0]);
+	$shrinkButton->set_tooltip_text($langLabels->{shrink}->[0]->{tooltip}->[0]);
+	$collapseButton->set_tooltip_text($langLabels->{collapse}->[0]->{tooltip}->[0]);
+	$recyclebinButton->set_tooltip_text($langLabels->{recyclebin}->[0]->{tooltip}->[0]);
 	#-------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------
@@ -240,7 +258,7 @@ my $color = Gtk2::Gdk::Color->new($$colorRGB{red}, $$colorRGB{green}, $$colorRGB
 #------------- Signals ---------------------------------------------------------
 
 	#------------- Main Window -----------------------------------------------------
-	$mainWindow->signal_connect(delete_event => sub { $configuration->save();Gtk2 ->main_quit });
+	$mainWindow->signal_connect(delete_event => sub { $configuration->save();Gtk3 ->main_quit });
 	#-------------------------------------------------------------------------------
 	
 	#------------- Top Menu Box Buttons --------------------------------------------
@@ -268,11 +286,11 @@ my $color = Gtk2::Gdk::Color->new($$colorRGB{red}, $$colorRGB{green}, $$colorRGB
 #------------- Accelerators --------------------------------------------------------
 
 	#------------- Accelerator Objects ---------------------------------------------
-	my $accel = Gtk2::AccelGroup->new();
+	my $accel = Gtk3::AccelGroup->new();
 	#-------------------------------------------------------------------------------
-	
+
 	#------------- Accelerator Shortcuts -------------------------------------------
-	my ( $key, $mods ) = Gtk2::Accelerator->parse( '<alt>T' );
+	my ( $key, $mods ) = Gtk3::accelerator_parse('<alt>T');
 	#-------------------------------------------------------------------------------
 	
 	#------------- Accelerator connecting ------------------------------------------
@@ -339,7 +357,7 @@ createStockIcons();
 $mainWindow->show_all;
 $inputEntry->grab_focus();
 if($compact) {minimize()} else {maximize()};
-Gtk2->main;
+Gtk3->main;
 #-------------------------------------------------------------------------------
 
 ################################################################################
@@ -532,10 +550,10 @@ sub switchLangGUI {
 	$configuration->setLang($newLang);
 	
 	if($newLang eq 'eng') {
-		my $switchLangEnImageLocal = Gtk2::Image->new_from_file($iconPath . '/eng_to_svk.png');
+		my $switchLangEnImageLocal = Gtk3::Image->new_from_file($iconPath . '/eng_to_svk.png');
 		$switchLangButton->set_property('image' => $switchLangEnImageLocal);
 	} else {
-		my $switchLangSkImageLocal = Gtk2::Image->new_from_file($iconPath . '/svk_to_eng.png');
+		my $switchLangSkImageLocal = Gtk3::Image->new_from_file($iconPath . '/svk_to_eng.png');
 		$switchLangButton->set_property('image' => $switchLangSkImageLocal);
 	} # if
 	
@@ -556,48 +574,59 @@ sub settingsGUI {
 	my $cancel = $langLabels->{settings}->[0]->{cancel}->[0];
 	my $title = $langLabels->{settings}->[0]->{header}->[0];
 	
-	my $dialog = Gtk2::Dialog->new (	
+	my $dialog = Gtk3::Dialog->new (	
 										$title,
 										$mainWindow,
 										[qw/modal destroy-with-parent/],
 										$ok     => 'accept',
 										$cancel => 'reject'
 									);
-	
-	$dialog->modify_bg ('normal', $color);				
+					
 	$dialog->set_resizable(FALSE);
 	
-	my $container = Gtk2::Table->new(2,2, TRUE);
+	my $radiobuttonEnglish = Gtk3::RadioButton->new_with_label(undef,$english);	
+	my $radiobuttonSlovak = Gtk3::RadioButton->new_with_label($radiobuttonEnglish->get_group(),$slovak);
 	
-	my $radiobuttonEnglish = Gtk2::RadioButton->new_with_label(undef,$english);	
-	my $radiobuttonSlovak = Gtk2::RadioButton->new_with_label($radiobuttonEnglish->get_group(),$slovak);
-	
+    $radiobuttonEnglish->signal_connect('toggled' => \&switchLangLabelsGUI);
+		
+    my $table = Gtk3::Table->new(2,2, TRUE);
+    
 	if($langForLabels eq 'eng') {
 		$radiobuttonEnglish->set_active(TRUE);
 	} else {
 		$radiobuttonSlovak->set_active(TRUE);
 	} # if
 	
-	my $labelColorButton = Gtk2::Label->new($chooser);
-	my $colorButton = Gtk2::ColorButton->new();
-	$colorButton->set_color($color);
+	my $labelColorButton = Gtk3::Label->new($chooser);
+	my $colorButton = Gtk3::ColorButton->new();
+	$colorButton->set_rgba(Gtk3::Gdk::RGBA::parse($colorRGB));
 	$colorButton->set_title($chooser);
 
-	$container->attach_defaults($radiobuttonEnglish,0,1,0,1);			 
-	$container->attach_defaults($radiobuttonSlovak,0,1,1,2);
-	$container->attach_defaults($labelColorButton,0,1,2,3);
-	$container->attach_defaults($colorButton,1,2,2,3);
-	$dialog->vbox->pack_start($container, FALSE, FALSE, 4);
-	
-	$radiobuttonEnglish->signal_connect('toggled' => \&switchLangLabelsGUI);
+    my $dialogContent = $dialog->get_content_area();
+    
+    $table->attach_defaults($radiobuttonEnglish,0,1,0,1);			 
+	$table->attach_defaults($radiobuttonSlovak,0,1,1,2);
+	$table->attach_defaults($labelColorButton,0,1,2,3);
+	$table->attach_defaults($colorButton,1,2,2,3);
+	$dialogContent->pack_start($table, FALSE, FALSE, 4);
 	
 	$dialog->show_all;
 	my $response = $dialog->run;
-	
+
 	if($response eq "accept") {
-		$color = $colorButton->get_color();
-		$configuration->setColor($color->red, $color->green, $color->blue);
-		$mainWindow->modify_bg('normal', $color);
+	    
+		my $color = $colorButton->get_rgba();
+		$colorRGB = $color->to_string;
+		$configuration->setColor($colorRGB);
+		
+	    $provider->load_from_data(
+                               "GtkWindow {\n"   .                      
+                               "   background-color: " . $colorRGB .";\n" .
+                               "}\n",
+                                -1, 
+                                undef
+                          );
+                          
 	} else {
 		switchLangLabelsGUI($radiobuttonEnglish);
 	} # if
@@ -752,21 +781,13 @@ sub createStockIcons {
 		# the stock id our stock item will be accessed with
 		my $stock_id = $icon;
 
-		# add a new entry to the stock system with our id
-		Gtk2::Stock->add ({
-							stock_id => $stock_id,
-							label    => $icon,
-							modifier => [],
-							translation_domain => 'gtk2_image',
-						});
-
 		# create an icon set, with only one member in this particular case
-		my $icon_set = Gtk2::IconSet->new_from_pixbuf (
-															Gtk2::Gdk::Pixbuf->new_from_file ($iconPath . "/" . $icons->{$icon}->[0])
+		my $icon_set = Gtk3::IconSet->new_from_pixbuf (
+															Gtk3::Gdk::Pixbuf->new_from_file ($iconPath . "/" . $icons->{$icon}->[0])
 														);
 
 		# create a new icon factory to handle rendering the image at various sizes...
-		my $icon_factory = Gtk2::IconFactory->new;
+		my $icon_factory = Gtk3::IconFactory->new;
 		# add our new stock icon to it...
 		$icon_factory->add ($stock_id, $icon_set);
 		# and then add this custom icon factory to the list of default places in
@@ -806,18 +827,18 @@ sub setLabelsGUI {
 	$langLabels = $configuration->getAllGuiLabels($langForLabels);
 	
 	$resultsTreeColumn->set_title($langLabels->{output}->[0]->{header}->[0]);
-	$toolTips->set_tip($addWordButton, $langLabels->{addword}->[0]->{tooltip}->[0]);
-	$toolTips->set_tip($addWordsButton, $langLabels->{addwords}->[0]->{tooltip}->[0]);
-	$toolTips->set_tip($addTenseButton, $langLabels->{addtense}->[0]->{tooltip}->[0]);
-	$toolTips->set_tip($switchLangButton, $langLabels->{switchlang}->[0]->{tooltip}->[0]);
-	$toolTips->set_tip($settingsButton, $langLabels->{settings}->[0]->{tooltip}->[0]);
-	$toolTips->set_tip($helpButton, $langLabels->{help}->[0]->{tooltip}->[0]);
-	$toolTips->set_tip($infoButton, $langLabels->{info}->[0]->{tooltip}->[0]);
-	$toolTips->set_tip($inputEntry, $langLabels->{inputentry}->[0]->{tooltip}->[0]);
-	$toolTips->set_tip($clipboardSearchButton, $langLabels->{clipboardsearch}->[0]->{tooltip}->[0]);
-	$toolTips->set_tip($shrinkButton, $langLabels->{shrink}->[0]->{tooltip}->[0]);
-	$toolTips->set_tip($collapseButton, $langLabels->{collapse}->[0]->{tooltip}->[0]);
-	$toolTips->set_tip($recyclebinButton, $langLabels->{recyclebin}->[0]->{tooltip}->[0]);
+	$addWordButton->set_tooltip_text($langLabels->{addword}->[0]->{tooltip}->[0]);
+	$addWordsButton->set_tooltip_text($langLabels->{addwords}->[0]->{tooltip}->[0]);
+	$addTenseButton->set_tooltip_text($langLabels->{addtense}->[0]->{tooltip}->[0]);
+	$switchLangButton->set_tooltip_text($langLabels->{switchlang}->[0]->{tooltip}->[0]);
+	$settingsButton->set_tooltip_text($langLabels->{settings}->[0]->{tooltip}->[0]);
+	$helpButton->set_tooltip_text($langLabels->{help}->[0]->{tooltip}->[0]);
+	$infoButton->set_tooltip_text($langLabels->{info}->[0]->{tooltip}->[0]);
+	$inputEntry->set_tooltip_text($langLabels->{inputentry}->[0]->{tooltip}->[0]);
+	$clipboardSearchButton->set_tooltip_text($langLabels->{clipboardsearch}->[0]->{tooltip}->[0]);
+	$shrinkButton->set_tooltip_text($langLabels->{shrink}->[0]->{tooltip}->[0]);
+	$collapseButton->set_tooltip_text($langLabels->{collapse}->[0]->{tooltip}->[0]);
+	$recyclebinButton->set_tooltip_text($langLabels->{recyclebin}->[0]->{tooltip}->[0]);
 	
 } # end sub setLabelsGUI
 
@@ -828,12 +849,12 @@ sub setLabelsGUI {
 
 sub maximize {
 
-	my $rect = $inputHBox->allocation();
+	my $rect = $inputHBox->get_allocation();
 	$topMenuHBox->show();
 	$outputHBox->show();
-	$mainWindow->resize($rect->width,$rect->height);
+	$mainWindow->resize($rect->{'width'},$rect->{'height'});
 	
-	my $maxImageLocal = Gtk2::Image->new_from_file($iconPath . '/shrink.png');
+	my $maxImageLocal = Gtk3::Image->new_from_file($iconPath . '/shrink.png');
 	$shrinkButton->set_property('image', $maxImageLocal);
 	
 	$configuration->setCompact(0);
@@ -848,11 +869,11 @@ sub maximize {
 
 sub minimize {
 
-	my $rect = $inputHBox->allocation();
+	my $rect = $inputHBox->get_allocation();
 	$topMenuHBox->hide();
 	$outputHBox->hide();
-	$mainWindow->resize($rect->width,$rect->height);
-	my $shrinkImageLocal = Gtk2::Image->new_from_file($iconPath . '/max.png');
+	$mainWindow->resize($rect->{'width'},$rect->{'height'});
+	my $shrinkImageLocal = Gtk3::Image->new_from_file($iconPath . '/max.png');
 	$shrinkButton->set_property('image', $shrinkImageLocal);
 	$configuration->setCompact(1);
 	$compact = $configuration->getCompact();

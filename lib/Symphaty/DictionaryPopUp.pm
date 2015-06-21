@@ -49,13 +49,13 @@ sub createAddingPopUp {
 	my $self = shift;
 	my($title, $ok, $cancel, $color, $iconPath) = @_;
 
-	my $popup = Gtk2::Window->new("toplevel");
-	my $vbox = Gtk2::VBox->new(FALSE, 0);
-	my $scrolled = Gtk2::ScrolledWindow->new();
-	my $textView = Gtk2::TextView->new();
-	my $close = Gtk2::Button->new();
-	my $progressbar = Gtk2::ProgressBar->new();
-	my $cancelButton = Gtk2::Button->new();
+	my $popup = Gtk3::Window->new("toplevel");
+	my $vbox = Gtk3::VBox->new(FALSE, 0);
+	my $scrolled = Gtk3::ScrolledWindow->new();
+	my $textView = Gtk3::TextView->new();
+	my $close = Gtk3::Button->new();
+	my $progressbar = Gtk3::ProgressBar->new();
+	my $cancelButton = Gtk3::Button->new();
 
 	my $textBuffer = $textView->get_buffer();
 	my $textIter = $textBuffer->get_end_iter();
@@ -102,13 +102,13 @@ sub createTranslationPopUp {
 
 	my $self = shift;
 	my($title, $text, $window, $color, $iconPath) = @_;
-	my($xscr, $yscr) = (Gtk2::Gdk->screen_width, Gtk2::Gdk->screen_height);
+	my($xscr, $yscr) = (Gtk3::Gdk->screen_width, Gtk3::Gdk->screen_height);
 	my($xpos, $ypos) = $window->get_position();
 	my($width, $height) = $window->get_size();
 
-	my $popup = Gtk2::Window->new("toplevel");
-	my $vbox = Gtk2::VBox->new(FALSE,5);
-	my $label = Gtk2::Label->new();
+	my $popup = Gtk3::Window->new("toplevel");
+	my $vbox = Gtk3::VBox->new(FALSE,5);
+	my $label = Gtk3::Label->new();
 
 	$popup->modify_bg ('normal', $color);
 	$popup->set_title($title);
@@ -186,7 +186,7 @@ sub updateProgressBar {
 		$self->{close}->set_sensitive(1);
 	} # if
 
-	Gtk2->main_iteration while Gtk2->events_pending; 
+	Gtk3->main_iteration while Gtk3->events_pending; 
 
 } # end sub updateProgressBar
 

@@ -42,7 +42,7 @@ sub new {
 
 =head2 createMessage
 	
-	This method creates gtk2 message dialog
+	This method creates Gtk3 message dialog
 =cut
 
 sub createMessage {
@@ -50,7 +50,7 @@ sub createMessage {
 	my $self = shift;
 	(my $parent, my $icon, my $button_type, my $text, my $title, my $color) = @_;
 
-	my $dialog = Gtk2::MessageDialog->new_with_markup (
+	my $dialog = Gtk3::MessageDialog->new_with_markup (
 															$parent,
 															[qw/modal destroy-with-parent/],
 															$icon,
@@ -85,7 +85,7 @@ sub createInputDialog {
 	my $y = 0;
 	my $z = 0;
 	
-	my $dialog = Gtk2::Dialog->new (	
+	my $dialog = Gtk3::Dialog->new (	
 										$title,
 										$parent,
 										[qw/modal destroy-with-parent/],
@@ -97,12 +97,12 @@ sub createInputDialog {
 	$dialog->set_resizable(FALSE);
 	$dialog->modify_bg ('normal', $color);
 	
-	my $container = Gtk2::Table->new(2,$numberLabels, TRUE);
+	my $container = Gtk3::Table->new(2,$numberLabels, TRUE);
 
 	foreach my $label(@labels) {
 	
-		my $boxLabel = Gtk2::Label->new($label);
-		my $boxEntry = Gtk2::Entry->new();
+		my $boxLabel = Gtk3::Label->new($label);
+		my $boxEntry = Gtk3::Entry->new();
 		$container->attach_defaults($boxLabel,$x,$x+1,$y,$y+1);
 		$container->attach_defaults($boxEntry,$x+1,$x+2,$y,$y+1);
 		$entries->{$label} = $boxEntry;
@@ -137,7 +137,7 @@ sub createFileChooser() {
 	my $self = shift;
 	my ($parent, $title, $ok, $cancel, $color) = @_;
 	
-	my $dialog = Gtk2::FileChooserDialog->new (	
+	my $dialog = Gtk3::FileChooserDialog->new (	
 										$title,
 										$parent,
 										'open',
@@ -169,7 +169,7 @@ sub createQuestionDialog () {
 	my $self = shift;
 	my($parent, $title, $ok, $cancel, $question, $color) = @_;
 
-	my $dialog = Gtk2::Dialog->new (	
+	my $dialog = Gtk3::Dialog->new (	
 										$title,
 										$parent,
 										[qw/modal destroy-with-parent/],
@@ -181,7 +181,7 @@ sub createQuestionDialog () {
 	$dialog->modify_bg ('normal', $color);
 	$dialog->set_resizable(FALSE);
 
-	my $questionLabel = Gtk2::Label->new($question);
+	my $questionLabel = Gtk3::Label->new($question);
 	
 	$dialog->vbox->pack_start($questionLabel, FALSE, FALSE, 4);
 
