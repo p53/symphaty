@@ -13,7 +13,7 @@ BEGIN {
 
 =head1 Symphaty
 
-	version = 0.4
+	version = 0.5
 	author = savage
 	licence = GPL
 	
@@ -21,7 +21,6 @@ BEGIN {
 	event functions for whole Symphaty
 
 =head2 Used Modules
-
 
 	strict
 	warnings
@@ -90,12 +89,6 @@ Searcher::setDbPath('path' => $main::scriptPath . '/../data/Dictionary.db');
 	my $recyclebinImage = Gtk3::Image->new_from_file($iconPath . '/recyclebin.png');
 	#-------------------------------------------------------------------------------
 	
-#-------------------------------------------------------------------------------
-                                               
-################################################################################
-
-#------------- Colors ----------------------------------------------------------
-my $color = '';
 #-------------------------------------------------------------------------------
 
 ################################################################################
@@ -384,7 +377,7 @@ sub addWordGUI {
 	my $addWordDialog = DictionaryDialog->new();
 
 	my @list=($english, $slovak);
-	$addWordDialog->createInputDialog($mainWindow, $title, \@list, $ok, $cancel, $color);
+	$addWordDialog->createInputDialog($mainWindow, $title, \@list, $ok, $cancel);
 	my $dialogResult = $addWordDialog->getDialogResult();
 
 	if(%$dialogResult) {
@@ -418,7 +411,7 @@ sub addWordsGUI {
 	my $message = '';
 
 	my $addWordsDialog = DictionaryDialog->new();
-	$addWordsDialog->createFileChooser($mainWindow, $title, $ok, $cancel, $color);
+	$addWordsDialog->createFileChooser($mainWindow, $title, $ok, $cancel);
 	my $dialogResult = $addWordsDialog->getDialogResult();
 	
 	if(%$dialogResult) {
@@ -434,13 +427,13 @@ sub addWordsGUI {
 		my $cancel = $langLabels->{addwordsProgress}->[0]->{cancel}->[0];
 
 		my $addWordsStateDialog = DictionaryPopUp->new();
-		$addWordsStateDialog->createAddingPopUp($title, $ok, $cancel, $color, $iconPath);
+		$addWordsStateDialog->createAddingPopUp($title, $ok, $cancel, $iconPath);
 
 		my $inserter = LangOperations->new();
 		my $counter = 0;
 
 		foreach my $line(@$fileContent) {
-
+            
 			$line = lc($line);
 			
 			my $cancelProgress = $addWordsStateDialog->getCancel();
@@ -502,7 +495,7 @@ sub addTenseGUI {
 
 	my $addWordDialog = DictionaryDialog->new();
 	my @list=($infinitive, $past, $participle);
-	$addWordDialog->createInputDialog($mainWindow, $title, \@list, $ok, $cancel, $color);
+	$addWordDialog->createInputDialog($mainWindow, $title, \@list, $ok, $cancel);
 	my $dialogResult = $addWordDialog->getDialogResult();
 	
 	if(%$dialogResult) {
@@ -518,7 +511,7 @@ sub addTenseGUI {
 		my $question = $langLabels->{addtenseUpdate}->[0]->{question}->[0];
 		$question =~ s/###word###/$dialogResult->{$infinitive}/g;
 		my $questionDialog = DictionaryDialog->new();
-		$questionDialog->createQuestionDialog($mainWindow, $title, $ok, $cancel, $question, $color);
+		$questionDialog->createQuestionDialog($mainWindow, $title, $ok, $cancel, $question);
 		my $try = $questionDialog->getDialogResult();
 
 		if($try->{question}) {
@@ -647,9 +640,9 @@ sub helpGUI {
 	my $langInterface = $configuration->getLangLabels();
 	
 	if($langInterface eq 'eng') {
-		$browser->openURL('/usr/share/symphaty/doc/help/index_eng.html');
+		$browser->openURL($main::scriptPath . '/../doc/help/index_eng.html');
 	} else {
-		$browser->openURL('/usr/share/symphaty/doc/help/index.html');
+		$browser->openURL($main::scriptPath . '/../doc/help/index.html');
 	} # if
 	
 } # end sub helpGUI
@@ -669,13 +662,13 @@ sub infoGUI {
 	
 	my $text = '<span foreground="#6598d7" size="x-large"><b>Symphaty</b></span>
 	
-<span foreground="black" size="x-large"><b>' . $version . ':</b> 0.4</span>
+<span foreground="black" size="x-large"><b>' . $version . ':</b> 0.5</span>
 <span foreground="black" size="x-large"><b>' . $author . ':</b> savage</span>
 <span foreground="black" size="x-large"><b>' . $license . ':</b> GPL</span>
-<span foreground="black" size="x-large"><b>'. $year . ':</b> 2011</span>';
+<span foreground="black" size="x-large"><b>'. $year . ':</b> 2015</span>';
 
 	my $infoAbout = DictionaryDialog->new();
-	$infoAbout->createMessage($mainWindow, 'info', 'ok', $text, $title, $color);
+	$infoAbout->createMessage($mainWindow, 'info', 'ok', $text, $title);
 	
 } # end sub infoGUI
 
@@ -730,7 +723,7 @@ sub ifKeyTranslateGUI {
 			if($compact) {
 				my $shortCutMessage = $langLabels->{output}->[0]->{messages}->[0]->{shortCutDisplay}->[0];
 				my $title = $langLabels->{output}->[0]->{header}->[0];
-				$deliveryToGui->displayShortCutResult($result, $title, $shortCutMessage, $searched, $mainWindow, $color, $iconPath);
+				$deliveryToGui->displayShortCutResult($result, $title, $shortCutMessage, $searched, $mainWindow, $iconPath);
 			} # if
 			
 		} else {			
@@ -907,7 +900,7 @@ sub infoMessage {
 	my $text = shift;
 	my $title = 'Info';
 	my $infoMessage = DictionaryDialog->new();
-	$infoMessage->createMessage($mainWindow,'info','ok', $text, $title, $color);
+	$infoMessage->createMessage($mainWindow,'info','ok', $text, $title);
 } # end sub infoMessage
 
 =head3 warningMessage
@@ -919,7 +912,7 @@ sub warningMessage {
 	my $text = shift;
 	my $title = 'Warning';
 	my $warningMessage = DictionaryDialog->new();
-	$warningMessage->createMessage($mainWindow,'warning','ok', $text, $title, $color);
+	$warningMessage->createMessage($mainWindow,'warning','ok', $text, $title);
 } # end sub warningMessage
 
 =head3 errorMessage
@@ -931,12 +924,12 @@ sub errorMessage {
 	my $text = shift;
 	my $title = 'Error';
 	my $errorMessage = DictionaryDialog->new();
-	$errorMessage->createMessage($mainWindow,'error','ok', $text, $title, $color);
+	$errorMessage->createMessage($mainWindow,'error','ok', $text, $title);
 } # end sub errorMessage
 
 =head1 Author
 
-	Copyright Pavol Ipoth 2011
+	Copyright Pavol Ipoth 2015
 	
 =head1 Licence
 

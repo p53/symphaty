@@ -6,12 +6,12 @@
 	
 =head1 Version
 
-	0.1
+	0.2
 	
 =head1 Synopsis
 
 	$popup = DictionaryPopUp->new();
-	$popup->createAddingPopUp($title, $ok, $cancel, $color);
+	$popup->createAddingPopUp($title, $ok, $cancel);
 	
 =head1 Description
 
@@ -42,12 +42,13 @@ sub new {
 =head2 createAddingPopUp
 	
 	This method creates popup with progressbar and text view, to display messages
+	
 =cut
 
 sub createAddingPopUp {
 	
 	my $self = shift;
-	my($title, $ok, $cancel, $color, $iconPath) = @_;
+	my($title, $ok, $cancel, $iconPath) = @_;
 
 	my $popup = Gtk3::Window->new("toplevel");
 	my $vbox = Gtk3::VBox->new(FALSE, 0);
@@ -67,7 +68,6 @@ sub createAddingPopUp {
 	$self->{textiter} = $textIter;
 
 	$popup->set_title($title);
-	$popup->modify_bg ('normal', $color);
 	$popup->set_position('center');
 	$popup->set_resizable(FALSE);
 	$popup->set_size_request(350,250);
@@ -77,7 +77,6 @@ sub createAddingPopUp {
 	$cancelButton->set_label($cancel);
 	$textView->set_editable(0);
 	$textView->set_cursor_visible(0);
-	$progressbar->set_orientation('left_to_right');
 
 	$popup->add($vbox);
 	$vbox->pack_start($close, FALSE, FALSE, 4);
@@ -96,13 +95,16 @@ sub createAddingPopUp {
 =head2 createTranslationPopUp
 
 	This method creates popup which lives just 5 secs, it is used for displying words in compact mode
+	
 =cut
 
 sub createTranslationPopUp {
 
 	my $self = shift;
-	my($title, $text, $window, $color, $iconPath) = @_;
-	my($xscr, $yscr) = (Gtk3::Gdk->screen_width, Gtk3::Gdk->screen_height);
+	my($title, $text, $window, $iconPath) = @_;
+	my $display = Gtk3::Gdk::Display::get_default();
+    my $screen = Gtk3::Gdk::Display::get_default_screen($display);
+	my($xscr, $yscr) = ($screen->get_width, $screen->get_height);
 	my($xpos, $ypos) = $window->get_position();
 	my($width, $height) = $window->get_size();
 
@@ -110,7 +112,6 @@ sub createTranslationPopUp {
 	my $vbox = Gtk3::VBox->new(FALSE,5);
 	my $label = Gtk3::Label->new();
 
-	$popup->modify_bg ('normal', $color);
 	$popup->set_title($title);
 	$popup->set_icon_from_file ($iconPath . '/symphaty.png'); 
 	$label->set_markup($text);
@@ -153,6 +154,7 @@ sub insertTextToPopUp {
 
 	This method is used for retrieving cancel value, which is set by some popups
 	if the cancel button is pushed
+	
 =cut
 
 sub getCancel {
@@ -163,6 +165,7 @@ sub getCancel {
 =head2 cancel
 
 	This method is used for setting cancel value by some popups, when cancel is clicked
+	
 =cut
 
 sub cancel {
@@ -186,7 +189,7 @@ sub updateProgressBar {
 		$self->{close}->set_sensitive(1);
 	} # if
 
-	Gtk3->main_iteration while Gtk3->events_pending; 
+	Gtk3::main_iteration() while Gtk3::events_pending(); 
 
 } # end sub updateProgressBar
 
@@ -198,7 +201,7 @@ sub updateProgressBar {
 
 =head1 Author
 
-	Copyright Pavol Ipoth 2011
+	Copyright Pavol Ipoth 2015
 	
 =head1 Licence
 

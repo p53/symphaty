@@ -6,7 +6,7 @@
 	
 =head1 Version
 
-	0.1
+	0.2
 
 =head1 Synopsis
 
@@ -31,6 +31,7 @@ use Symphaty::Verifier;
 =head1 Methods
 	
 	List of methods
+	
 =cut
 
 sub new() {
@@ -43,6 +44,7 @@ sub new() {
 =head2 read
 
 	This method reads content of the file and returns it in array additionaly count lines
+	
 =cut
 
 sub read() {
@@ -64,6 +66,7 @@ sub read() {
 =head2 verify
 
 	This method verifies if file is non-empty, text-file and has batch format
+	
 =cut
 
 sub verify() {
@@ -101,6 +104,7 @@ sub verify() {
 =head2 parseLine
 
 	This method splits line passed to it
+	
 =cut
 
 sub parseLine() {
@@ -123,7 +127,7 @@ sub getCount() {
 
 =head1 Author
 
-	Copyright Pavol Ipoth 2011
+	Copyright Pavol Ipoth 2015
 	
 =head1 Dependencies
 

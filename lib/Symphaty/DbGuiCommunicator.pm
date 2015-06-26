@@ -8,7 +8,7 @@
 	
 =head1 Version
 
-	0.1
+	0.2
 	
 =head1 Synopsis
 
@@ -33,6 +33,7 @@ use Symphaty::DictionaryPopUp;
 =head1 Methods
 	
 	Listing of methods
+	
 =cut
 
 sub new {
@@ -45,6 +46,7 @@ sub new {
 =head2 displayResult
 	
 	This method displays result from retrieved from database to tree view Gtk3 widget
+	
 =cut
 
 sub displayResult {
@@ -95,12 +97,13 @@ sub displayResult {
 =head2 displayShortCutResult
 	
 	This method displays result from database to popup messages when it is in compact mode
+	
 =cut
 
 sub displayShortCutResult {
 
 	my $self = shift;
-	my($result, $title, $shortCutMessage, $searched, $window, $color, $iconPath) = @_;
+	my($result, $title, $shortCutMessage, $searched, $window, $iconPath) = @_;
 	my $text ='';
 
 	my $dialog = DictionaryPopUp->new();
@@ -118,7 +121,7 @@ sub displayShortCutResult {
 	} # foreach
 
 
-	$dialog->createTranslationPopUp($title, $text, $window, $color, $iconPath);
+	$dialog->createTranslationPopUp($title, $text, $window, $iconPath);
 
 } # end sub displayShortCutResult
 
@@ -130,7 +133,7 @@ sub displayShortCutResult {
 
 =head1 Author
 
-	Copyright Pavol Ipoth 2011
+	Copyright Pavol Ipoth 2015
 	
 =head1 Licence
 

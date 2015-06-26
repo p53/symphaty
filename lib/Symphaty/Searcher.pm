@@ -6,7 +6,7 @@
 	
 =head1 Version
 
-	0.1
+	0.2
 	
 =head1 Synopsis
 
@@ -16,6 +16,7 @@
 =head1 Description
 
 	This package serves for operations on database
+	
 =cut
 
 package Searcher;
@@ -34,6 +35,7 @@ use Symphaty::MyDictionary::Schema::En_Phrase;
 =head1 Methods
 
 	List of methods
+	
 =cut
 
 my $schema;
@@ -79,6 +81,7 @@ sub getTranslationDirection() {
 =head2 setTranslationDirection
 
 	This method sets translation direction which stores
+	
 =cut
 
 sub setTranslationDirection($) {
@@ -91,6 +94,7 @@ sub setTranslationDirection($) {
 =head2 search
 
 	This method searches in by methods of this class for word meaning, tense and phrase in direction stored
+	
 =cut
 
 sub search($) {
@@ -270,6 +274,7 @@ sub searchSkWordId {
 =head2 addWord
 
 	This method adds word in word table and controls if there already is or not 
+	
 =cut
 
 sub addWord {
@@ -410,7 +415,7 @@ sub addTense {
 
 =head1 Author
 
-	Copyright Pavol Ipoth 2011
+	Copyright Pavol Ipoth 2015
 	
 =head1 Licence
 

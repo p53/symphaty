@@ -5,7 +5,7 @@
       <color>
         <rgba>rgb(211,215,207)</rgba>
       </color>
-      <compact>0</compact>
+      <compact>1</compact>
       <iconsPath>pixmaps</iconsPath>
       <stockIcons>
         <gtk-dialog-error>error.png</gtk-dialog-error>
@@ -224,5 +224,5 @@
     </labels>
   </gui>
   <langDirection>eng</langDirection>
-  <langLabels>svk</langLabels>
+  <langLabels>eng</langLabels>
 </Configuration>

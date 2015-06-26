@@ -6,7 +6,7 @@
 	
 =head1 Version
 
-	0.1
+	0.2
 	
 =head1 Synopsis
 
@@ -16,6 +16,7 @@
 =head1 Description
 	
 	This package is used for verifying values if they match criteria which can be added as regular expression
+	
 =cut
 
 package Verifier;
@@ -25,6 +26,7 @@ package Verifier;
 =head1 Methods
 	
 	List of methods
+	
 =cut
 
 sub new() {
@@ -48,6 +50,7 @@ sub _init() {
 =head2 addPattern
 	
 	This method serves for adding your custom patterns
+	
 =cut
 
 sub addPattern() {
@@ -61,6 +64,7 @@ sub addPattern() {
 =head2 verify
 	
 	This method servers for verifying according your pattern and supplied value
+	
 =cut
 
 sub verify() {
@@ -79,7 +83,7 @@ sub verify() {
 
 =head1 Author
 
-	Copyright Pavol Ipoth 2011
+	Copyright Pavol Ipoth 2015
 	
 =head1 Licence
 

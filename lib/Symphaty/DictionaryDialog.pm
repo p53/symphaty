@@ -8,16 +8,17 @@
 	
 =head1 Version
 
-	0.1
+	0.2
 	
 =head1 Synopsis
 
 	$dialog = DictionaryDialog->new();
-	$dialog-> createMessage($window, $icon, 'info', 'lala', 'title', $color);
+	$dialog-> createMessage($window, $icon, 'info', 'lala', 'title');
 	
 =head1 Description
 
 	This package helps to encapsulate dialog creation
+	
 =cut
 
 package DictionaryDialog;
@@ -31,6 +32,7 @@ my $dialogResult = {};
 =head1 Methods
 
 	List of methods
+	
 =cut
 
 sub new {
@@ -43,24 +45,25 @@ sub new {
 =head2 createMessage
 	
 	This method creates Gtk3 message dialog
+	
 =cut
 
 sub createMessage {
 
 	my $self = shift;
-	(my $parent, my $icon, my $button_type, my $text, my $title, my $color) = @_;
+	(my $parent, my $icon, my $button_type, my $text, my $title) = @_;
 
-	my $dialog = Gtk3::MessageDialog->new_with_markup (
+	my $dialog = Gtk3::MessageDialog->new(
 															$parent,
 															[qw/modal destroy-with-parent/],
 															$icon,
 															$button_type,
-															$text
+															undef
 														);
 	
 	$dialog->set_title($title);
 	$dialog->set_resizable(FALSE);
-	$dialog->modify_bg ('normal', $color);
+    $dialog->set_markup($text);
 
 	my $retval = $dialog->run;
 
@@ -71,12 +74,13 @@ sub createMessage {
 =head2 createInputDialog
 	
 	This method helps to create dialog with custom number of inputs
+	
 =cut
 
 sub createInputDialog {
 
 	my $self = shift;
-	my($parent, $title, $labelList, $ok, $cancel, $color) = @_;
+	my($parent, $title, $labelList, $ok, $cancel) = @_;
 	my @labels = @$labelList;
 	my $numberLabels = @labels;
 	
@@ -95,7 +99,6 @@ sub createInputDialog {
 
 	$dialog->set_position('mouse');
 	$dialog->set_resizable(FALSE);
-	$dialog->modify_bg ('normal', $color);
 	
 	my $container = Gtk3::Table->new(2,$numberLabels, TRUE);
 
@@ -111,7 +114,8 @@ sub createInputDialog {
 		
 	} # foreach
 
-	$dialog->vbox->pack_start($container, FALSE, FALSE, 4);
+    my $dialogContent = $dialog->get_content_area();
+	$dialogContent->pack_start($container, FALSE, FALSE, 4);
 	$dialog->show_all;
 	
 	my $returnValue = $dialog->run;
@@ -135,7 +139,7 @@ sub createInputDialog {
 sub createFileChooser() {
 
 	my $self = shift;
-	my ($parent, $title, $ok, $cancel, $color) = @_;
+	my ($parent, $title, $ok, $cancel) = @_;
 	
 	my $dialog = Gtk3::FileChooserDialog->new (	
 										$title,
@@ -145,7 +149,6 @@ sub createFileChooser() {
 										$cancel => 'reject'
 									);
 									
-	$dialog->modify_bg ('normal', $color);
 	$dialog->show_all;
 	
 	my $retval = $dialog->run;
@@ -162,12 +165,13 @@ sub createFileChooser() {
 =head2 createQuestionDialog
 
 	This methos creates dialog with question
+	
 =cut
 
 sub createQuestionDialog () {
 
 	my $self = shift;
-	my($parent, $title, $ok, $cancel, $question, $color) = @_;
+	my($parent, $title, $ok, $cancel, $question) = @_;
 
 	my $dialog = Gtk3::Dialog->new (	
 										$title,
@@ -178,12 +182,12 @@ sub createQuestionDialog () {
 									);
 
 	$dialog->set_position('mouse');
-	$dialog->modify_bg ('normal', $color);
 	$dialog->set_resizable(FALSE);
 
 	my $questionLabel = Gtk3::Label->new($question);
 	
-	$dialog->vbox->pack_start($questionLabel, FALSE, FALSE, 4);
+	my $dialogContent = $dialog->get_content_area();
+	$dialogContent->pack_start($questionLabel, FALSE, FALSE, 4);
 
 	$dialog->show_all;
 
@@ -200,6 +204,7 @@ sub createQuestionDialog () {
 =head2 getDialogResult
 	
 	This methods serves for getting result of dialog, e.g. filechooser returns name of choosed file etc.
+	
 =cut
 
 sub getDialogResult {
@@ -216,7 +221,7 @@ sub getDialogResult {
 
 =head1 Author
 
-	Copyright Pavol Ipoth 2011
+	Copyright Pavol Ipoth 2015
 	
 =head1 Licence
 

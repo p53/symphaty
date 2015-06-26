@@ -6,7 +6,7 @@
 	
 =head1 Version
 
-	0.1
+	0.2
 	
 =head1 Synopsis
 
@@ -34,6 +34,7 @@ use Symphaty::Verifier;
 =head1 Methods
 
 	List of methods
+	
 =cut
 
 my $instance;
@@ -62,6 +63,7 @@ sub _init() {
 =head2 getResult
 
 	This method retrieves result from translate operation
+	
 =cut
 
 sub getResult {
@@ -83,6 +85,7 @@ sub getLangDirection {
 =head2 translate
 
 	This method translates supplied word in actual translation direction
+	
 =cut
 
 sub translate {
@@ -109,6 +112,7 @@ sub translate {
 =head2 switchLang
 
 	This method switches language direction of this class
+	
 =cut
 
 sub switchLang {
@@ -128,6 +132,7 @@ sub switchLang {
 =head2 addWordSet
 
 	This method controls process of adding word to database, verification etc..
+	
 =cut
 
 sub addWordSet {
@@ -195,6 +200,7 @@ sub addWordSet {
 =head2 addTenseSet
 
 	This method controls process of adding tense to database, verifiacation etc.
+	
 =cut
 
 sub addTenseSet() {
@@ -254,7 +260,7 @@ sub addTenseSet() {
 
 =head1 Author
 
-	Copyright Pavol Ipoth 2011
+	Copyright Pavol Ipoth 2015
 	
 =head1 Licence
 

@@ -6,7 +6,7 @@
 	
 =head1 Version
 
-	0.1
+	0.2
 	
 =head1 Synopsis
 
@@ -58,6 +58,7 @@ sub _init {
 =head2 setLang
 
 	This method sets lang translation direction into xml data stored in xmlData
+	
 =cut
 
 sub setLang {
@@ -198,6 +199,7 @@ sub getIconsPath {
 =head2 save
 
 	This method writes all data stored in xmlData property to file
+	
 =cut
 
 sub save {
@@ -215,7 +217,7 @@ sub save {
 
 =head1 Author
 
-	Copyright Pavol Ipoth 2011
+	Copyright Pavol Ipoth 2015
 	
 =head1 Licence
 
