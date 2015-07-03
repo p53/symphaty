@@ -1,0 +1,111 @@
+<HTML>
+<HEAD>
+<TITLE>	package Browser</TITLE>
+<LINK href="main.css" type="text/css" rel="stylesheet"></HEAD>
+<BODY BGCOLOR="#ffffff" TEXT="#000000">
+<UL>
+<LI><A HREF="#Name">Name
+
+</A><LI><A HREF="#Version">Version
+
+</A><LI><A HREF="#Synopsis">Synopsis
+
+</A><LI><A HREF="#Description">Description
+
+</A><LI><A HREF="#Methods">Methods
+
+</A><UL>
+<LI><A HREF="#openURL">openURL
+
+</A></UL>
+<LI><A HREF="#Author">Author
+
+</A><LI><A HREF="#Licence">Licence
+
+</A></UL>
+<HR>
+<H1><A NAME="Name">Name
+
+</A></H1>
+
+<PRE>	package Browser
+	
+</PRE>
+<H1><A NAME="Version">Version
+
+</A></H1>
+
+<PRE>	0.1
+	
+</PRE>
+<H1><A NAME="Synopsis">Synopsis
+
+</A></H1>
+
+<PRE>	$browser = Browser-&gt;new();
+	$browser-&gt;openURL($absolutePath);
+	
+</PRE>
+<H1><A NAME="Description">Description
+
+</A></H1>
+
+<PRE>	This package detects OS and according that opens in browser
+	
+</PRE>
+<H1><A NAME="Methods">Methods
+
+</A></H1>
+
+<PRE>	List of methods
+	
+</PRE>
+<H2><A NAME="openURL">openURL
+
+</A></H2>
+
+<PRE>	This method opens absoulute path given as parameter in browser
+=cut</PRE>
+
+<P>sub openURL {
+	
+</P>
+<PRE>	my $self = shift;
+	my $url = shift;
+	my $browsers = $self-&gt;{browsers};
+	
+	if($self-&gt;{OS} eq 'MSWin32') {
+		system('start /b ' . $url);
+	} elsif($self-&gt;{OS} eq 'linux' or $self-&gt;{OS} eq 'darwin') {
+		
+		foreach my $browser(@$browsers) {
+			my $isThere = `whereis $browser`;
+			if($isThere =~ /^[\w-]+\:(\s+[\w\/\-_]+)/) {
+				my $cmd = `$1 $url`;
+				last;
+			} # if
+		} # foreach
+		
+	} # if
+	
+</PRE>
+
+<P>} # end sub openURL
+
+</P><H1><A NAME="Author">Author
+
+</A></H1>
+
+<PRE>	Copyright Pavol Ipoth 2015
+	
+</PRE>
+<H1><A NAME="Licence">Licence
+
+</A></H1>
+
+<PRE>	GPL
+	
+</PRE>
+
+</BODY>
+</HTML>

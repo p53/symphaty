@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Symphaty
+GenericName=Symphaty Dictionary
+Comment=English-Slovak, Slovak-English dictionary
+Icon=symphaty.png
+Exec=symphaty.pl
+Terminal=false
+StartupNotify=true
+Categories=Office;

@@ -1,0 +1,6 @@
+?package(symphaty):\
+		needs="x11"\
+		section="Applications/Office"\
+		title="Firefox Browser"\
+		command="/usr/bin/firefox" hints="Web browsers"\
+		icon="/usr/share/symphaty/pixmaps/symphaty.png"

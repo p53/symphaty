@@ -1,0 +1,189 @@
+<HTML>
+<HEAD>
+<TITLE>	package Searcher</TITLE>
+<LINK href="main.css" type="text/css" rel="stylesheet"></HEAD>
+<BODY BGCOLOR="#ffffff" TEXT="#000000">
+<UL>
+<LI><A HREF="#Name">Name
+
+</A><LI><A HREF="#Version">Version
+
+</A><LI><A HREF="#Synopsis">Synopsis
+
+</A><LI><A HREF="#Description">Description
+
+</A><LI><A HREF="#Methods">Methods
+
+</A><UL>
+<LI><A HREF="#getTranslationDirection">getTranslationDirection
+
+</A><LI><A HREF="#setTranslationDirection">setTranslationDirection
+
+</A><LI><A HREF="#search">search
+
+</A><LI><A HREF="#searchWord">searchWord
+
+</A><LI><A HREF="#searchPhrase">searchPhrase
+
+</A><LI><A HREF="#searchTense">searchTense
+
+</A><LI><A HREF="#searchEngWordId">searchEngWordId
+
+</A><LI><A HREF="#searchSkWordId">searchSkWordId
+
+</A><LI><A HREF="#addWord">addWord
+
+</A><LI><A HREF="#addManyToMany">addManyToMany
+
+</A><LI><A HREF="#addTense">addTense
+
+</A></UL>
+<LI><A HREF="#Dependencies">Dependencies
+
+</A><LI><A HREF="#Author">Author
+
+</A><LI><A HREF="#Licence">Licence
+
+</A></UL>
+<HR>
+<H1><A NAME="Name">Name
+
+</A></H1>
+
+<PRE>	package Searcher
+	
+</PRE>
+<H1><A NAME="Version">Version
+
+</A></H1>
+
+<PRE>	0.2
+	
+</PRE>
+<H1><A NAME="Synopsis">Synopsis
+
+</A></H1>
+
+<PRE>	$searcher = Searcher-&gt;new();
+	%result = $searcher-&gt;search($word);
+	
+</PRE>
+<H1><A NAME="Description">Description
+
+</A></H1>
+
+<PRE>	This package serves for operations on database
+	
+</PRE>
+<H1><A NAME="Methods">Methods
+
+</A></H1>
+
+<PRE>	List of methods
+	
+</PRE>
+<H2><A NAME="getTranslationDirection">getTranslationDirection
+
+</A></H2>
+
+<PRE>	This method get actual translation direction as it stores
+	
+</PRE>
+<H2><A NAME="setTranslationDirection">setTranslationDirection
+
+</A></H2>
+
+<PRE>	This method sets translation direction which stores
+	
+</PRE>
+<H2><A NAME="search">search
+
+</A></H2>
+
+<PRE>	This method searches in by methods of this class for word meaning, tense and phrase in direction stored
+	
+</PRE>
+<H2><A NAME="searchWord">searchWord
+
+</A></H2>
+
+<PRE>	This method searches in database for word meaning
+	
+</PRE>
+<H2><A NAME="searchPhrase">searchPhrase
+
+</A></H2>
+
+<PRE>	This method searches in database for phrase for given word
+	
+</PRE>
+<H2><A NAME="searchTense">searchTense
+
+</A></H2>
+
+<PRE>	This method searches for tense for given word in database
+	
+</PRE>
+<H2><A NAME="searchEngWordId">searchEngWordId
+
+</A></H2>
+
+<PRE>	This method returns id of supplied english word
+	
+</PRE>
+<H2><A NAME="searchSkWordId">searchSkWordId
+
+</A></H2>
+
+<PRE>	This method returns id of supplied slovak word
+	
+</PRE>
+<H2><A NAME="addWord">addWord
+
+</A></H2>
+
+<PRE>	This method adds word in word table and controls if there already is or not 
+	
+</PRE>
+<H2><A NAME="addManyToMany">addManyToMany
+
+</A></H2>
+
+<PRE>	This method adds junction between word tables to many to many table and controls if there are already
+	
+</PRE>
+<H2><A NAME="addTense">addTense
+
+</A></H2>
+
+<PRE>	This method adds tense to database and controls if there already is word and their tenses
+	
+</PRE>
+<H1><A NAME="Dependencies">Dependencies
+
+</A></H1>
+
+<PRE>	MyDictionary::Schema;
+	MyDictionary::Schema::Engword;
+	MyDictionary::Schema::Skword;
+	MyDictionary::Schema::En_To_Sk;
+	MyDictionary::Schema::En_Phrase;
+	
+</PRE>
+<H1><A NAME="Author">Author
+
+</A></H1>
+
+<PRE>	Copyright Pavol Ipoth 2015
+	
+</PRE>
+<H1><A NAME="Licence">Licence
+
+</A></H1>
+
+<PRE>	GPL
+	
+</PRE>
+
+</BODY>
+</HTML>
